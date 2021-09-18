@@ -1,0 +1,14 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+scrapy = "~=2.5"
+django = "~=3.2"
+scrapy-djangoitem = "~=1.1"
+
+[dev-packages]
+
+[requires]
+python_version = "3"
