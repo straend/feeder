@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item">
+      <a class="page-link" href="/{{prev_url}}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li class="page-item"><a class="page-link" href='/{{date|date:"d/m/Y"}}'>{{ date }}</a></li>
+      <li class="page-item"><a class="page-link" href='/'>Today</a></li>
+
+    <li class="page-item">
+      <a class="page-link" href="/{{next_url}}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+{% endblock %}
+{% block content %}
+<div class="row">
+    {% for r,v in mm.items %}
+    <div class="col-sm-6 col-md-5 col-lg-3">
+    <div class="card p-1">
+      <div class="card-body">
+        <h5 class="card-title">{{ r }}</h5>
+       <ul class="list-group list-group-flush">
+        {% for f in v %}
+        <li class="list-group-item" title="{{f.food}}">
+           <span class="badge bg-secondary rounded-pill">{{f.price}}</span>
+          <br>{{f.food | truncatechars:150  | linebreaks }}
+        </li>
+    {% endfor %}
+      </ul>
+      </div>
+    </div>
+     </div>
+
+{% endfor %}
+</div>
+{% endblock %}

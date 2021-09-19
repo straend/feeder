@@ -47,6 +47,6 @@ class UnicaSpider(scrapy.Spider):
                 meal = MealItem()
                 meal['restaurant'] = restaurant
                 meal['date'] = m_date
-                meal['food'] = ", ".join(m['Components'])
+                meal['food'] = "\n".join(m['Components'])
                 meal['price'] = float(f_price.replace(',', '.'))
                 yield meal
