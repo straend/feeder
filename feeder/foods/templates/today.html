@@ -1,30 +1,53 @@
 {% extends 'base.html' %}
+{% block bootstrap5_title %}Foods {{ date }}{% endblock %}
 {% block title %}
-<nav aria-label="Page navigation example">
+
+{% with date|date:"Y-m-d" as selected %}
+{% now "Y-m-d" as todays_date %}
+
+<div class="sticky-top container-fluid justify-content-center">
+<div class="row">
+<nav>
   <ul class="pagination">
     <li class="page-item">
       <a class="page-link" href="/{{prev_url}}" aria-label="Previous">
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>
-    <li class="page-item"><a class="page-link" href='/{{date|date:"d/m/Y"}}'>{{ date }}</a></li>
-      <li class="page-item"><a class="page-link" href='/'>Today</a></li>
-
+     <!-- <li class="page-item"><a class="page-link" href='/{{date|date:"d/m/Y"}}'>{{ date }}</a></li> -->
+      <li class="page-item">
+        <input class="align-middle page-link" type="date" onChange="selectDate(event);" value='{{date|date:"Y-m-d"}}'>
+    </li>
+      {% if selected != todays_date %}
+             <li class="page-item"><a class="page-link" href='/'>Today</a></li>
+      {% endif %}
     <li class="page-item">
       <a class="page-link" href="/{{next_url}}" aria-label="Next">
         <span aria-hidden="true">&raquo;</span>
       </a>
     </li>
+
   </ul>
 </nav>
+    </div>
+
+</div>
+<script>
+    function selectDate(e) {
+        let target_date = e.target.value.split("-").reverse().join("/");
+        window.location.pathname="/"+target_date;
+    }
+</script>
+{% endwith %}
 {% endblock %}
+
 {% block content %}
 <div class="row">
     {% for r,v in mm.items %}
-    <div class="col-sm-6 col-md-5 col-lg-3">
-    <div class="card p-1">
+    <div class="col-sm-6 col-md-4 col-lg-3">
+    <div class="card m-1" id="{{r}}">
       <div class="card-body">
-        <h5 class="card-title">{{ r }}</h5>
+          <h5 class="card-title"><a href="#{{r}}">{{ r }}</a></h5>
        <ul class="list-group list-group-flush">
         {% for f in v %}
         <li class="list-group-item" title="{{f.food}}">

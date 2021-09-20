@@ -15,21 +15,24 @@ def today(request, day=None, month=None, year=None):
     if year is None:
         year = now.year
     d = datetime.date(year, month, day)
-    meals = Meal.objects.filter(date=d)
+    meals = Meal.objects.prefetch_related('restaurant').filter(date=d)
+
+    # Sort in Alphabetical order, kinda hacky
     mm = {}
     for m in meals:
         if m.restaurant.name in mm:
             mm[m.restaurant.name].append(m)
         else:
             mm[m.restaurant.name] = [m]
-    prev = d - datetime.timedelta(days=1)
-    next = d + datetime.timedelta(days=1)
+    prev_d = d - datetime.timedelta(days=1)
+    next_d = d + datetime.timedelta(days=1)
+    mmm = {x: mm[x] for x in sorted(mm)}
 
     context = {
         'date': d,
-        'mm': mm,
-        'prev_url': prev.strftime("%d/%m/%Y"),
-        'next_url': next.strftime("%d/%m/%Y"),
+        'mm': mmm,
+        'prev_url': prev_d.strftime("%d/%m/%Y"),
+        'next_url': next_d.strftime("%d/%m/%Y"),
 
     }
 
