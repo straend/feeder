@@ -1,6 +1,6 @@
 import scrapy
 
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from foods.models import Restaurant, Chain, Meal
 from ..items import MealItem
 
@@ -11,6 +11,10 @@ class KarkafeernaSpider(scrapy.Spider):
     start_urls = ['http://www.karkafeerna.fi/se']
 
     def parse(self, response):
+        restaurant_pages = response.css('a::attr(href)').re('.*veckans-lista.*')
+        yield from response.follow_all(restaurant_pages, self.parse_weeks)
+
+    def parse_weeks(self, response):
         restaurant_pages = response.css('a::attr(href)').re('.*veckans-lista.*')
         yield from response.follow_all(restaurant_pages, self.parse_restaurant)
 
